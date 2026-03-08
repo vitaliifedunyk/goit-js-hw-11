@@ -1,0 +1,17 @@
+.loader {
+  display: block;
+  width: fit-content;
+  margin: 0 auto 32px;
+  color: #2e2f42;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+}
+
+.loader::after {
+  content: 'Loading images, please wait...';
+}
+
+.is-hidden {
+  display: none;
+}
