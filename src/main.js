@@ -9,37 +9,50 @@ import {
   hideLoader,
 } from './js/render-functions';
 
-const form = document.querySelector('.form');
+const form = document.getElementById('js-form');
 
-form.addEventListener('submit', handleSubmit);
+form.addEventListener('submit', onFormHandleSubmit);
 
-function handleSubmit(event) {
-  // TODO:
-  // 1. Заборонити стандартну поведінку форми
-  // 2. Отримати значення поля пошуку
-  // 3. Прибрати зайві пробіли через trim()
-  // 4. Якщо рядок порожній:
-  //    - показати iziToast
-  //    - зупинити виконання
-  // 5. Очистити попередню галерею
-  // 6. Показати loader
-  // 7. Викликати getImagesByQuery(query)
-  // 8. У then():
-  //    - перевірити data.hits.length
-  //    - якщо 0, показати iziToast
-  //    - якщо є дані, викликати createGallery(...)
-  // 9. У catch():
-  //    - опрацювати помилку
-  //    - показати iziToast
-  // 10. У finally():
-  //     - сховати loader
-  //     - скинути форму
+function onFormHandleSubmit(e) {
+  e.preventDefault();
 
-  void event;
-  void iziToast;
-  void getImagesByQuery;
-  void createGallery;
-  void clearGallery;
-  void showLoader;
-  void hideLoader;
+  const formData = new FormData(e.target);
+  const query = formData.get('search-text');
+
+  if (!query) {
+    iziToast.error({
+      message: 'Please fill in the search field!',
+      position: 'topRight',
+    });
+    return;
+  }
+
+  clearGallery();
+  showLoader();
+
+  getImagesByQuery(query)
+    .then(data => {
+      if (data.hits.length === 0) {
+        iziToast.error({
+          message:
+            'Sorry, there are no images matching your search query. Please try again!',
+          position: 'topRight',
+        });
+        return;
+      }
+
+      createGallery(data.hits);
+    })
+    .catch(error => {
+      console.log(error);
+
+      iziToast.error({
+        message: 'Something went wrong. Please try again later.',
+        position: 'topRight',
+      });
+    })
+    .finally(() => {
+      hideLoader();
+      form.reset();
+    });
 }

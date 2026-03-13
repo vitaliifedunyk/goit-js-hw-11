@@ -1,22 +1,15 @@
 import axios from 'axios';
 
 const BASE_URL = 'https://pixabay.com/api/';
-const API_KEY = '';
+const API_KEY = '54943904-4c7872f3e0f1bf375155a9c6b';
 
 export function getImagesByQuery(query) {
-  // TODO:
-  // 1. Використати axios.get(...)
-  // 2. Передати BASE_URL
-  // 3. Передати params:
-  //    - key
-  //    - q
-  //    - image_type
-  //    - orientation
-  //    - safesearch
-  // 4. Повернути response.data
-
-  void query;
-  void axios;
-  void BASE_URL;
-  void API_KEY;
+  const params = {
+    key: API_KEY,
+    q: query,
+    image_type: 'photo',
+    orientation: 'horizontal',
+    safesearch: true,
+  };
+  return axios.get(BASE_URL, { params }).then(res => res.data);
 }

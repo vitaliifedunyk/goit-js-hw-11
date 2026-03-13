@@ -1,56 +1,62 @@
+// Описаний у документації
 import SimpleLightbox from 'simplelightbox';
+// Додатковий імпорт стилів
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
-const gallery = document.querySelector('.gallery');
-const loader = document.querySelector('.loader');
+const refs = {
+  gallery: document.querySelector('.gallery'),
+  loader: document.querySelector('.loader'),
+};
 
-const lightbox = new SimpleLightbox('.gallery a', {
-  // TODO: додай потрібні опції для підпису
+const simpleLightBox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
 });
 
-function createGalleryMarkup(images) {
-  // TODO:
-  // 1. Перебрати масив images через map()
-  // 2. Із кожного об'єкта взяти:
-  //    - webformatURL
-  //    - largeImageURL
-  //    - tags
-  //    - likes
-  //    - views
-  //    - comments
-  //    - downloads
-  // 3. Повернути рядок з HTML-розміткою
-  // 4. Не забути join('')
-
-  void images;
-  return '';
-}
-
 export function createGallery(images) {
-  // TODO:
-  // 1. Створити markup через createGalleryMarkup(images)
-  // 2. Додати markup в gallery
-  // 3. Викликати lightbox.refresh()
+  const markup = images
+    .map(
+      ({
+        webformatURL,
+        largeImageURL,
+        tags,
+        likes,
+        views,
+        comments,
+        downloads,
+      }) => {
+        return `<li class="gallery-item">
+          <a class="gallery-link" href="${largeImageURL}">
+            <img
+              class="gallery-image"
+              src="${webformatURL}"
+              alt="${tags}"
+            />
+          </a>
+          <div class="info">
+            <p><b>Likes</b>${likes}</p>
+            <p><b>Views</b>${views}</p>
+            <p><b>Comments</b>${comments}</p>
+            <p><b>Downloads</b>${downloads}</p>
+          </div>
+        </li>`;
+      }
+    )
+    .join('');
 
-  void images;
-  void gallery;
-  void lightbox;
+  refs.gallery.insertAdjacentHTML('afterbegin', markup);
+
+  simpleLightBox.refresh();
 }
 
 export function clearGallery() {
-  // TODO: очистити вміст gallery
-
-  void gallery;
+  refs.gallery.innerHTML = '';
 }
 
 export function showLoader() {
-  // TODO: показати loader
-
-  void loader;
+  refs.loader.classList.remove('is-hidden');
 }
 
 export function hideLoader() {
-  // TODO: сховати loader
-
-  void loader;
+  refs.loader.classList.add('is-hidden');
 }
